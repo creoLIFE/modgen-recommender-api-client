@@ -13,23 +13,32 @@ $db = '';
 $key = '';
 $classApiClient = new \Recommender\Api\Client($db, $key);
 
+$product = array(
+    'id' => 'item-352',
+    'name' => 'Jizdni kolo',
+    'description' => 'Sahodlouhy popis produktu',
+    'price' => '7500'
+);
+
 $products = array(
     0 => array(
-        'id' => 'item-350',
-        'name' => 'Jizdni kolo',
-        'description' => 'Sahodlouhy popis produktu',
-        'price' => '7500'
+        'id' => 'item-355',
+        'name' => 'Jizdni kolo 1',
+        'description' => 'Sahodlouhy popis produktu 1',
+        'price' => '7000'
     ),
     1 => array(
-        'id' => 'item-351',
-        'name' => 'Zimni bunda',
-        'description' => 'Nejaky jiny popis',
-        'price' => '2000'
+        'id' => 'item-356',
+        'name' => 'Zimni bunda 1',
+        'description' => 'Nejaky jiny popis 1',
+        'price' => '2010'
     )
 );
 
 $classApiClient->setDebug(true);
-$classApiClient->checkHmacAuthentication('gahpiev6eighaig1aek4ujietheiXeengae3Ohqu9iecutheof5rooxeigheel8G');
+$classApiClient->setHost('http://rapi-dev.modgen.net');
 
-//$classApiClient->setHost('http://rapi-dev.modgen.net');
+//$classApiClient->checkHmacAuthentication('gahpiev6eighaig1aek4ujietheiXeengae3Ohqu9iecutheof5rooxeigheel8G');
+
+$classApiClient->addProduct($product,'id');
 $classApiClient->addProducts($products,'id');

@@ -120,7 +120,7 @@ class Client
         }
 
         foreach ($dataList as $key => $p) {
-            self::addProduct($p,$keyElement);
+            self::addProduct($p, $keyElement);
         }
     }
 
@@ -132,8 +132,8 @@ class Client
     public function addProduct($data, $keyElement)
     {
         self::addProductID($data[$keyElement]);
-        self::addProductProperties($data);
-        self::addProductValues($data[$keyElement], $data);
+        self::addProductProperties($keyElement, $data);
+        self::addProductValues($keyElement, $data[$keyElement], $data);
     }
 
     /**
@@ -160,10 +160,10 @@ class Client
         $hmac = new Hmac($key);
 
         $hash = $hmac->checkAuth(self::API_HMAC_AUTH_CHECK_STRING_1);
-        echo "Hashed: " . $hash . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_1 . ", Same: " . ( $hash === self::API_HMAC_AUTH_CHECK_RESULT_1 ? 'true' : 'false') . "<br>";
+        echo "String: " . self::API_HMAC_AUTH_CHECK_STRING_1 . ", Hashed: " . $hash . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_1 . ", Same: " . ($hash === self::API_HMAC_AUTH_CHECK_RESULT_1 ? 'true' : 'false') . "<br>";
 
         $hash2 = $hmac->checkAuth(self::API_HMAC_AUTH_CHECK_STRING_2);
-        echo "Hashed: " . $hash2 . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_2 . ", Same: " . ( $hash2 === self::API_HMAC_AUTH_CHECK_RESULT_2 ? 'true' : 'false');
+        echo "String: " . self::API_HMAC_AUTH_CHECK_STRING_2 . ", Hashed: " . $hash2 . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_2 . ", Same: " . ($hash2 === self::API_HMAC_AUTH_CHECK_RESULT_2 ? 'true' : 'false');
 
         if ($this->debug) {
             die();
@@ -198,12 +198,17 @@ class Client
 
     /**
      * Method will add properties in to product ID
+     * @param string $keyElement - definition of main key fron data array
      * @param array $products - list of properties to add (connect to item id)
      * @return boolean
      */
-    private function addProductProperties(array $products)
+    private function addProductProperties($keyElement, array $product)
     {
-        foreach ($products as $key => $val) {
+        if (isset($product[$keyElement])) {
+            unset($product[$keyElement]);
+        }
+
+        foreach ($product as $key => $val) {
             $url = str_replace(
                 array(
                     '%db%',
@@ -228,13 +233,18 @@ class Client
 
     /**
      * Method will add properties in to product ID
+     * @param string $keyElement - definition of main key fron data array
      * @param string $productID - Item ID
      * @param array $products - list of properties to add (connect to item id)
      * @return boolean
      */
-    private function addProductValues($productID, array $products)
+    private function addProductValues($keyElement, $productID, array $product)
     {
-        $query = http_build_query($products);
+        if (isset($product[$keyElement])) {
+            unset($product[$keyElement]);
+        }
+
+        $query = http_build_query($product);
         $url = str_replace(
             array(
                 '%db%',
@@ -292,7 +302,11 @@ class Client
         $curl = curl_init();
 
         $hmac = new Hmac($this->key);
-        $urlHashed = $hmac->hashQuery($url);
+        $urlHashed = $this->host . $hmac->hashQuery($url);
+
+        if ($this->debug) {
+            print_r($urlHashed);
+        }
 
         switch ($method) {
             case "POST":
@@ -305,7 +319,7 @@ class Client
                 curl_setopt($curl, CURLOPT_PUT, 1);
                 break;
         }
-        curl_setopt($curl, CURLOPT_URL, $this->host . $urlHashed);
+        curl_setopt($curl, CURLOPT_URL, $urlHashed);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $result = curl_exec($curl);
         curl_close($curl);
