@@ -110,20 +110,30 @@ class Client
 
     /**
      * Method is responsible of adding products to Modgen Recommender API
-     * @param array $data - list of arrays with data
+     * @param array $dataList - list of arrays with data
      * @param string $keyElement - definition of main key fron data array
      */
-    public function addProducts($data, $keyElement)
+    public function addProducts($dataList, $keyElement)
     {
-        if (!isset($data[0]) || is_array($data[0])) {
-            $data[] = $data;
+        if (!is_array($dataList) && count($dataList) < 2) {
+            $dataList[] = $dataList;
         }
 
-        foreach ($data as $key => $p) {
-            self::addProductID($p[$keyElement]);
-            self::addProductProperties($p);
-            self::addProductValues($p[$keyElement], $p);
+        foreach ($dataList as $key => $p) {
+            self::addProduct($p,$keyElement);
         }
+    }
+
+    /**
+     * Method is responsible of adding products to Modgen Recommender API
+     * @param array $data - array with data
+     * @param string $keyElement - definition of main key fron data array
+     */
+    public function addProduct($data, $keyElement)
+    {
+        self::addProductID($data[$keyElement]);
+        self::addProductProperties($data);
+        self::addProductValues($data[$keyElement], $data);
     }
 
     /**
