@@ -150,10 +150,10 @@ class Client
         $hmac = new Hmac($key);
 
         $hash = $hmac->checkAuth(self::API_HMAC_AUTH_CHECK_STRING_1);
-        echo "Hashed: " . $hash . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_1 . "<br>";
+        echo "Hashed: " . $hash . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_1 . ", Same: " . ( $hash === self::API_HMAC_AUTH_CHECK_RESULT_1 ? 'true' : 'false') . "<br>";
 
-        $hash = $hmac->checkAuth(self::API_HMAC_AUTH_CHECK_STRING_2);
-        echo "Hashed: " . $hash . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_2;
+        $hash2 = $hmac->checkAuth(self::API_HMAC_AUTH_CHECK_STRING_2);
+        echo "Hashed: " . $hash2 . ", Expected: " . self::API_HMAC_AUTH_CHECK_RESULT_2 . ", Same: " . ( $hash2 === self::API_HMAC_AUTH_CHECK_RESULT_2 ? 'true' : 'false');
 
         if ($this->debug) {
             die();
@@ -299,7 +299,7 @@ class Client
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $result = curl_exec($curl);
         curl_close($curl);
-print_r($result);
+
         return $result;
     }
 }
