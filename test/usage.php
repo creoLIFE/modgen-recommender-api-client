@@ -9,13 +9,27 @@
 ERROR_REPORTING(E_ALL);
 require __DIR__ . "/../src/loader.php";
 
-$fileName = './data/input.xml';
-
-
-
+$db = '';
+$key = '';
+$classApiClient = new \Recommender\Api\Client($db, $key);
 
 $products = array(
-
+    0 => array(
+        'id' => 'item-350',
+        'name' => 'Jizdni kolo',
+        'description' => 'Sahodlouhy popis produktu',
+        'price' => '7500'
+    ),
+    1 => array(
+        'id' => 'item-351',
+        'name' => 'Zimni bunda',
+        'description' => 'Nejaky jiny popis',
+        'price' => '2000'
+    )
 );
 
-$classParser->parseModgenXml($fileName);
+$classApiClient->setDebug(true);
+$classApiClient->checkHmacAuthentication('gahpiev6eighaig1aek4ujietheiXeengae3Ohqu9iecutheof5rooxeigheel8G');
+
+//$classApiClient->setHost('http://rapi-dev.modgen.net');
+$classApiClient->addProducts($products,'id');

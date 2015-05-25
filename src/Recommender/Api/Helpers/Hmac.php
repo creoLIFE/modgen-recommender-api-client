@@ -1,7 +1,7 @@
 <?php
 /**
- * Class responsible of Modgen API Communiction
- * @package Recommender/Api
+ * Class responsible of Modgen API HMAC hashing
+ * @package Recommender/Api/Helpers
  * @copyright (c) Modgen s.r.o. 2015
  * @author Mirek Ratman
  * @version 1.0
@@ -44,4 +44,13 @@ class Hmac
         return $url . '&' . self::HMAC_KEY_SIGN . '=' . $sign;
     }
 
+    /**
+     * Hash given url using HMAC
+     * @param string $url - URL to hash
+     * @return string
+     */
+    public function checkAuth($string)
+    {
+        return hash_hmac("sha1", $string, $this->key);
+    }
 }
