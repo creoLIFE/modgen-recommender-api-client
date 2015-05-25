@@ -115,7 +115,7 @@ class Client
      */
     public function addProducts($data, $keyElement)
     {
-        if (!is_array($data) && count($data) < 2) {
+        if (!isset($data[0]) || is_array($data[0])) {
             $data[] = $data;
         }
 
