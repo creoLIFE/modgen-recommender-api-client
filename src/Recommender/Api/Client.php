@@ -13,28 +13,29 @@ namespace Recommender\Api;
 
 use Recommender\Api\Helpers\Hmac;
 use Recommender\Api\Helpers\Property;
+use Recommender\Api\Transport\Transport;
 
 class Client
 {
     /*
      * @var string - ADD Item URL
      */
-    const API_URL_ADDITEM = '/%db%/items/%itemid%';
+    const API_URL_ADDITEM = '/items/%itemid%';
 
     /*
      * @var string - ADD Item property
      */
-    const API_URL_ADDITEM_PROPERTIES = '/%db%/items/properties/%propertyname%?type=%type%';
+    const API_URL_ADDITEM_PROPERTIES = '/items/properties/%propertyname%';
 
     /*
      * @var string - ADD Item values
      */
-    const API_URL_ADDITEM_VALUES = '/%db%/items/%itemid%';
+    const API_URL_ADDITEM_VALUES = '/items/%itemid%';
 
     /*
      * @var string - ADD purchase
      */
-    const API_URL_ADDPURCHASE = '/%db%/purchases';
+    const API_URL_ADDPURCHASE = '/purchases';
 
     /*
      * @var string - Hmac authentication check string 1
@@ -72,24 +73,30 @@ class Client
     private $key = '';
 
     /*
+     * @var mixed - Instance of Transport class
+     */
+    private $transport;
+
+    /*
      * @var boolean - enable/disable debug mode
      */
     private $debug = false;
 
-    /**
-     * Class constructor
-     * @param string $db - DB ID where data will be stored
-     * @param string $key - unique API key
+    /*
+     * @var boolean - tell if properties was already added in last request
      */
-    public function __construct($db, $key)
+    private $propertiesAdded = false;
+
+    /**
+     * @return string
+     */
+    public function getHost()
     {
-        $this->db = $db;
-        $this->key = $key;
+        return $this->host;
     }
 
     /**
-     * Method will set API host
-     * @param string $host - DB ID where data will be stored
+     * @param string $host
      */
     public function setHost($host)
     {
@@ -97,15 +104,104 @@ class Client
     }
 
     /**
-     * Method will set debug mode
-     * @param string $debug - true/false
+     * @return string
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    /**
+     * @param string $db
+     */
+    public function setDb($db)
+    {
+        $this->db = $db;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransport()
+    {
+        return $this->transport;
+    }
+
+    /**
+     * @param mixed $transport
+     */
+    public function setTransport($transport)
+    {
+        $this->transport = $transport;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+
+    /**
+     * @param boolean $debug
      */
     public function setDebug($debug)
     {
         $this->debug = $debug;
-        if ($this->debug) {
-            echo "<pre>";
-        }
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPropertiesAdded()
+    {
+        return $this->propertiesAdded;
+    }
+
+    /**
+     * @param boolean $propertiesAdded
+     */
+    public function setPropertiesAdded($propertiesAdded)
+    {
+        $this->propertiesAdded = $propertiesAdded;
+    }
+
+
+    /**
+     * Class constructor
+     * @param string $host - Modgen API host
+     * @param string $db - DB ID where data will be stored
+     * @param string $key - unique API key
+     * @param Transport $transport
+     */
+    public function __construct($host, $db, $key, Transport $transport)
+    {
+        $this->setHost($host);
+        $this->setDb($db);
+        $this->setKey($key);
+
+        $transport->setDb($this->getDb());
+        $transport->setKey($this->getKey());
+        $transport->setHost($this->getHost());
+
+        $this->setTransport($transport);
     }
 
     /**
@@ -121,6 +217,7 @@ class Client
 
         foreach ($dataList as $key => $p) {
             self::addProduct($p, $keyElement);
+            $this->setPropertiesAdded(true);
         }
     }
 
@@ -128,11 +225,14 @@ class Client
      * Method is responsible of adding products to Modgen Recommender API
      * @param array $data - array with data
      * @param string $keyElement - definition of main key fron data array
+     * @param boolean $propertiesAlreadySet - definition of main key fron data array
      */
     public function addProduct($data, $keyElement)
     {
         self::addProductID($data[$keyElement]);
-        self::addProductProperties($keyElement, $data);
+        if( !$this->isPropertiesAdded() ) {
+            self::addProductProperties($keyElement, $data);
+        }
         self::addProductValues($keyElement, $data[$keyElement], $data);
     }
 
@@ -177,21 +277,22 @@ class Client
      */
     private function addProductID($productID)
     {
+        $transport = $this->getTransport();
+
         $url = str_replace(
             array(
-                '%db%',
                 '%itemid%'
             ),
             array(
-                $this->db,
                 $productID,
             ),
             self::API_URL_ADDITEM
         );
 
-        $result = self::call('PUT', $url);
+        $transport->addCall('PUT', $url);
+        $result = $transport->process();
 
-        if ($this->debug) {
+        if ($this->isDebug()) {
             print_r($result);
         }
     }
@@ -208,24 +309,23 @@ class Client
             unset($product[$keyElement]);
         }
 
+        $transport = $this->getTransport();
+
         foreach ($product as $key => $val) {
             $url = str_replace(
                 array(
-                    '%db%',
-                    '%propertyname%',
-                    '%type%'
+                    '%propertyname%'
                 ),
                 array(
-                    $this->db,
-                    $key,
-                    Property::getPropertyType($val)
+                    $key
                 ),
                 self::API_URL_ADDITEM_PROPERTIES
             );
 
-            $result = self::call('PUT', $url);
+            $transport->addCall('PUT', $url, array('type'=>Property::getPropertyType($val)), 'GET');
+            $result = $transport->process();
 
-            if ($this->debug) {
+            if ($this->isDebug()) {
                 print_r($result);
             }
         }
@@ -244,22 +344,22 @@ class Client
             unset($product[$keyElement]);
         }
 
-        $query = http_build_query($product);
+        $transport = $this->getTransport();
+
         $url = str_replace(
             array(
-                '%db%',
                 '%itemid%'
             ),
             array(
-                $this->db,
                 $productID,
             ),
             self::API_URL_ADDITEM_VALUES
         );
 
-        $result = self::call('POST', $url, $query);
+        $transport->addCall('POST', $url, $product);
+        $result = $transport->process();
 
-        if ($this->debug) {
+        if ($this->isDebug()) {
             print_r($result);
         }
     }
@@ -272,58 +372,13 @@ class Client
      */
     private function addPurchase(array $purchases)
     {
-        $query = http_build_query($purchases);
-        $url = str_replace(
-            array(
-                '%db%'
-            ),
-            array(
-                $this->db
-            ),
-            self::API_URL_ADDPURCHASE
-        );
+        $transport = $this->getTransport();
 
-        $result = self::call('POST', $url, $query);
+        $transport->addCall('POST', self::API_URL_ADDPURCHASE, $purchases);
+        $result = $transport->process();
 
-        if ($this->debug) {
+        if ($this->isDebug()) {
             print_r($result);
         }
-    }
-
-    /**
-     * Method will add product ID to DB
-     * @param string $method - method to call
-     * @param string $url - URL to call
-     * @param string $postQueryData - data to be send via POST in key=value URL format (encode it via example http_build_query function
-     * @return boolean
-     */
-    private function call($method, $url, $postQueryData = false)
-    {
-        $curl = curl_init();
-
-        $hmac = new Hmac($this->key);
-        $urlHashed = $this->host . $hmac->hashQuery($url);
-
-        if ($this->debug) {
-            print_r($urlHashed);
-        }
-
-        switch ($method) {
-            case "POST":
-                curl_setopt($curl, CURLOPT_POST, 1);
-                if ($postQueryData) {
-                    curl_setopt($curl, CURLOPT_POSTFIELDS, $postQueryData);
-                }
-                break;
-            case "PUT":
-                curl_setopt($curl, CURLOPT_PUT, 1);
-                break;
-        }
-        curl_setopt($curl, CURLOPT_URL, $urlHashed);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        curl_close($curl);
-
-        return $result;
     }
 }

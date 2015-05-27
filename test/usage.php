@@ -11,7 +11,8 @@ require __DIR__ . "/../src/loader.php";
 
 $db = '';
 $key = '';
-$classApiClient = new \Recommender\Api\Client($db, $key);
+$classApiClient = new \Recommender\Api\Client('http://rapi-dev.modgen.net', $db, $key, new Recommender\Api\Transport\Batch());
+//$classApiClient = new \Recommender\Api\Client('http://rapi-dev.modgen.net', $db, $key, new Recommender\Api\Transport\Transport());
 
 $product = array(
     'id' => 'item-352',
@@ -22,13 +23,13 @@ $product = array(
 
 $products = array(
     0 => array(
-        'id' => 'item-355',
+        'id' => 'item-400',
         'name' => 'Jizdni kolo 1',
         'description' => 'Sahodlouhy popis produktu 1',
         'price' => '7000'
     ),
     1 => array(
-        'id' => 'item-356',
+        'id' => 'item-401',
         'name' => 'Zimni bunda 1',
         'description' => 'Nejaky jiny popis 1',
         'price' => '2010'
@@ -36,9 +37,8 @@ $products = array(
 );
 
 $classApiClient->setDebug(true);
-$classApiClient->setHost('http://rapi-dev.modgen.net');
-
 //$classApiClient->checkHmacAuthentication('gahpiev6eighaig1aek4ujietheiXeengae3Ohqu9iecutheof5rooxeigheel8G');
 
-$classApiClient->addProduct($product,'id');
+//$classApiClient->addProduct($product,'id');
 $classApiClient->addProducts($products,'id');
+
