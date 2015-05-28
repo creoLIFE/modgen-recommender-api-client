@@ -38,6 +38,11 @@ class Client
     const API_URL_ADDPURCHASE = '/purchases';
 
     /*
+     * @var string - Delete DB
+     */
+    const API_URL_DELETEDB = '/';
+
+    /*
      * @var string - Hmac authentication check string 1
      */
     const API_HMAC_AUTH_CHECK_STRING_1 = '/modgen/items/9346/recomms/?count=5&targetUserId=fb2fbe12-9f69-45a1-9fc0-df0c1592e4c7&hmac_timestamp=1398463889';
@@ -267,6 +272,24 @@ class Client
 
         if ($this->debug) {
             die();
+        }
+    }
+
+    /**
+     * Method is responsible of adding products to Modgen Recommender API
+     * @param array $data - array with data
+     * @param string $keyElement - definition of main key fron data array
+     * @param boolean $propertiesAlreadySet - definition of main key fron data array
+     */
+    public function deleteDb()
+    {
+        $transport = $this->getTransport();
+
+        $transport->addCall('DELETE', self::API_URL_DELETEDB);
+        $result = $transport->process();
+
+        if ($this->isDebug()) {
+            print_r($result);
         }
     }
 
