@@ -237,6 +237,7 @@ class Client
         self::addProductID($data[$keyElement]);
         if( !$this->isPropertiesAdded() ) {
             self::addProductProperties($keyElement, $data);
+            $this->setPropertiesAdded(true);
         }
         self::addProductValues($keyElement, $data[$keyElement], $data);
     }
