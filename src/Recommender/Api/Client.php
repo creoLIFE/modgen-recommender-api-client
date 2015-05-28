@@ -291,6 +291,7 @@ class Client
 
         if ($this->isDebug()) {
             print_r($result);
+            print_r('<br>');
         }
     }
 
@@ -318,6 +319,7 @@ class Client
 
         if ($this->isDebug()) {
             print_r($result);
+            print_r('<br>');
         }
     }
 
@@ -351,6 +353,7 @@ class Client
 
             if ($this->isDebug()) {
                 print_r($result);
+                print_r('<br>');
             }
         }
     }
@@ -385,6 +388,7 @@ class Client
 
         if ($this->isDebug()) {
             print_r($result);
+            print_r('<br>');
         }
     }
 
@@ -403,6 +407,7 @@ class Client
 
         if ($this->isDebug()) {
             print_r($result);
+            print_r('<br>');
         }
     }
 }
