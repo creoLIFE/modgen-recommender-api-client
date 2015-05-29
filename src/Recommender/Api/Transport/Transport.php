@@ -62,6 +62,11 @@ class Transport
     */
     private $results;
 
+    /*
+     * @var boolean
+    */
+    private $debug = false;
+
     /**
      * @return string
      */
@@ -196,6 +201,22 @@ class Transport
     public function addResults($results)
     {
         $this->results[] = $results;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+
+    /**
+     * @param boolean $debug
+     */
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
     }
 
     /**

@@ -146,8 +146,11 @@ class Batch extends Transport
         parent::addCall($this->getBathMethod(), self::API_URL_BATCH, $this->getBatch(), $this->getPostType());
         $result = parent::process();
 
-        //echo "<pre>";
-        //print_r($this->getBatch());
+        if ($this->isDebug()) {
+            echo "<pre>";
+            print_r($this->getBatch());
+            print_r('<br>');
+        }
 
         $this->setBatch(array());
         $this->setCount(0);

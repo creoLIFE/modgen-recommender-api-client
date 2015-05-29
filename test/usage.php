@@ -13,6 +13,7 @@ $db = 'shopexpo-test';
 $key = 'DyioS5vct4fyqbjjr7Yno8dUFALYjAZe0JP3yR65aCNdtbjk92F9gxU1yDAVR7QS';
 $transport = new Recommender\Api\Transport\Batch();
 //$transport->setBatchSize(4);
+$transport->setDebug(true);
 $classApiClient = new \Recommender\Api\Client('http://rapi-dev.modgen.net', $db, $key, $transport);
 //$classApiClient = new \Recommender\Api\Client('http://rapi-dev.modgen.net', $db, $key, new Recommender\Api\Transport\Transport());
 
