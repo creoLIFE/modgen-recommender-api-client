@@ -57,6 +57,11 @@ class Transport
     */
     private $postType;
 
+    /*
+     * @var array
+    */
+    private $results;
+
     /**
      * @return string
      */
@@ -170,6 +175,30 @@ class Transport
     }
 
     /**
+     * @return mixed
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    /**
+     * @param mixed $results
+     */
+    public function setResults($results)
+    {
+        $this->results = $results;
+    }
+
+    /**
+     * @param mixed $results
+     */
+    public function addResults($results)
+    {
+        $this->results[] = $results;
+    }
+
+    /**
      * Method will prepare CURL request
      * @param string $method - method to call
      * @param string $url - URL to call
@@ -178,6 +207,8 @@ class Transport
      */
     public function addCall($method, $url, array $postQueryData = array(), $postType = 'QUERY')
     {
+        $curl = new Curl();
+
         $urlDbPrefix = str_replace(
             array(
                 '%db%'
@@ -188,6 +219,9 @@ class Transport
             self::API_URL_DBPRFIX
         );
 
+        $post = $curl->encodePostQuery($postQueryData, $postType);
+        $url = $url . ($post['url'] ? '&' . $post['url'] : '');
+
         $hmac = new Hmac($this->getKey());
         $urlHashed = $this->getHost() . $hmac->hashQuery($urlDbPrefix . $url);
 
@@ -195,15 +229,6 @@ class Transport
         $this->setUrl($urlHashed);
         $this->setPostQueryData($postQueryData);
         $this->setPostType($postType);
-    }
-
-    /**
-     * Method will process CURL request
-     * @return JSON
-     */
-    public function process()
-    {
-        $curl = new Curl();
 
         $curl->addCall(
             $this->getMethod(),
@@ -212,6 +237,15 @@ class Transport
             $this->getPostType()
         );
 
-        return $curl->process();
+        self::addResults( $curl->process() );
+    }
+
+    /**
+     * Method will return results of API calls
+     * @return array
+     */
+    public function process()
+    {
+        return self::getResults();
     }
 }

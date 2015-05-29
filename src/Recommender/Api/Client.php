@@ -253,6 +253,7 @@ class Client
         }
 
         foreach ($data as $key => $p) {
+            self::addPurchase($p);
         }
     }
 
@@ -285,14 +286,7 @@ class Client
     public function deleteDb()
     {
         $transport = $this->getTransport();
-
         $transport->addCall('DELETE', self::API_URL_DELETEDB);
-        $result = $transport->process();
-
-        if ($this->isDebug()) {
-            print_r($result);
-            print_r('<br>');
-        }
     }
 
     /**
@@ -303,7 +297,6 @@ class Client
     private function addProductID($productID)
     {
         $transport = $this->getTransport();
-
         $url = str_replace(
             array(
                 '%itemid%'
@@ -313,14 +306,7 @@ class Client
             ),
             self::API_URL_ADDITEM
         );
-
         $transport->addCall('PUT', $url);
-        $result = $transport->process();
-
-        if ($this->isDebug()) {
-            print_r($result);
-            print_r('<br>');
-        }
     }
 
     /**
@@ -336,7 +322,6 @@ class Client
         }
 
         $transport = $this->getTransport();
-
         foreach ($product as $key => $val) {
             $url = str_replace(
                 array(
@@ -347,14 +332,7 @@ class Client
                 ),
                 self::API_URL_ADDITEM_PROPERTIES
             );
-
             $transport->addCall('PUT', $url, array('type'=>Property::getPropertyType($val)), 'GET');
-            $result = $transport->process();
-
-            if ($this->isDebug()) {
-                print_r($result);
-                print_r('<br>');
-            }
         }
     }
 
@@ -372,7 +350,6 @@ class Client
         }
 
         $transport = $this->getTransport();
-
         $url = str_replace(
             array(
                 '%itemid%'
@@ -382,27 +359,27 @@ class Client
             ),
             self::API_URL_ADDITEM_VALUES
         );
-
         $transport->addCall('POST', $url, $product);
-        $result = $transport->process();
-
-        if ($this->isDebug()) {
-            print_r($result);
-            print_r('<br>');
-        }
     }
 
     /**
      * Method will add properties in to product ID
-     * @param string $productID - Item ID
-     * @param array $products - list of properties to add (connect to item id)
+     * @param array $data - list of properties to add (connect to item id)
      * @return boolean
      */
-    private function addPurchase(array $purchases)
+    private function addPurchase(array $data)
     {
         $transport = $this->getTransport();
+        $transport->addCall('POST', self::API_URL_ADDPURCHASE, $data);
+    }
 
-        $transport->addCall('POST', self::API_URL_ADDPURCHASE, $purchases);
+    /**
+     * Method will process requests
+     * @return mxed
+     */
+    public function process()
+    {
+        $transport = $this->getTransport();
         $result = $transport->process();
 
         if ($this->isDebug()) {

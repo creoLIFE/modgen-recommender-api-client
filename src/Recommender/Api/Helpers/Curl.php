@@ -64,7 +64,7 @@ class Curl
     {
         $this->curl = curl_init();
         $post = self::encodePostQuery($postQueryData, $postType);
-        $url = $url . ($post['url'] ? '&' . $post['url'] : '');
+//        $url = $url . ($post['url'] ? '&' . $post['url'] : '');
 
         switch ($method) {
             case "GET":

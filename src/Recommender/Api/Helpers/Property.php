@@ -36,7 +36,8 @@ class Property
                 if ($forceSetType) {
                     return 'set';
                 }
-                if ((is_numeric($value) && (int)$value == $value)) {
+
+                if (self::is_timestamp($value)) {
                     return 'timestamp';
                 }
                 return 'string';
@@ -44,4 +45,16 @@ class Property
         }
     }
 
+    /**
+     * Check is property is timestamp
+     * @param string $timestamp
+     * @return boolean
+     */
+    private static function is_timestamp($timestamp)
+    {
+        return ((string)(int)$timestamp === $timestamp)
+        && ($timestamp <= PHP_INT_MAX)
+        && ($timestamp >= ~PHP_INT_MAX)
+        && (!strtotime($timestamp));
+    }
 }
