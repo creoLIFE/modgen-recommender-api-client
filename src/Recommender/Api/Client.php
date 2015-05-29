@@ -367,7 +367,7 @@ class Client
      * @param array $data - list of properties to add (connect to item id)
      * @return boolean
      */
-    private function addPurchase(array $data)
+    public function addPurchase(array $data)
     {
         $transport = $this->getTransport();
         $transport->addCall('POST', self::API_URL_ADDPURCHASE, $data);
