@@ -47,7 +47,7 @@ class Property
                 }
 
                 if( $propertyName === 'price' ){
-                    return 'int';
+                    return 'double';
                 }
 
                 return 'string';
