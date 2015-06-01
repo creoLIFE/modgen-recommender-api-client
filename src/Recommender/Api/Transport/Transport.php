@@ -230,6 +230,8 @@ class Transport
     {
         $curl = new Curl();
 
+        self::setResults(array());
+
         $urlDbPrefix = str_replace(
             array(
                 '%db%'

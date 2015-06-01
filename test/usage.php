@@ -49,7 +49,7 @@ $products = array(
 );
 
 $purchase = array(
-    'itemId' => 'item-400',
+    'itemId' => 'false',
     'userId' => 'AAABSCgTw5rtOLpwHdE4WTgc',
     'timestamp' => '2014-08-29T20:22:28.789000'
 );
