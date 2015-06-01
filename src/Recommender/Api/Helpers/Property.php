@@ -16,6 +16,7 @@ class Property
     /**
      * Return right property type
      * @param string $value - property to check
+     * @param string $propertyName - property name
      * @param boolean $forceSetType - force type of value to "set"
      * @return string
      */
