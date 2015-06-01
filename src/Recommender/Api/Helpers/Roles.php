@@ -33,17 +33,4 @@ class Roles
                 break;
         }
     }
-
-    /**
-     * Check is property is timestamp
-     * @param string $timestamp
-     * @return boolean
-     */
-    private static function is_timestamp($timestamp)
-    {
-        return ((string)(int)$timestamp === $timestamp)
-        && ($timestamp <= PHP_INT_MAX)
-        && ($timestamp >= ~PHP_INT_MAX)
-        && (!strtotime($timestamp));
-    }
 }

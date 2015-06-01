@@ -48,13 +48,21 @@ $products = array(
     )
 );
 
+$purchase = array(
+    'itemId' => 'item-400',
+    'userId' => 'AAABSCgTw5rtOLpwHdE4WTgc',
+    'timestamp' => '2014-08-29T20:22:28.789000'
+);
+
 $classApiClient->setDebug(true);
 //$classApiClient->checkHmacAuthentication('gahpiev6eighaig1aek4ujietheiXeengae3Ohqu9iecutheof5rooxeigheel8G');
 
 
 $classApiClient->deleteDb();
-$classApiClient->addProduct($product,'id');
-//$classApiClient->addProducts($products,'id');
+$classApiClient->addProducts($products,'id');
+//$classApiClient->addProduct($product,'id');
+$classApiClient->addPurchase($purchase);
+
 $classApiClient->process();
 
 

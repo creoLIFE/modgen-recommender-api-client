@@ -41,7 +41,7 @@ class Client
     /*
      * @var string - ADD purchase
      */
-    const API_URL_ADDPURCHASE = '/purchases';
+    const API_URL_ADDPURCHASE = '/purchases/';
 
     /*
      * @var string - Delete DB
@@ -408,7 +408,16 @@ class Client
     public function addPurchase(array $data)
     {
         $transport = $this->getTransport();
-        $transport->addCall('POST', self::API_URL_ADDPURCHASE, $data);
+        $out = array();
+        foreach($data as $key=>$val){
+            if( $key === 'timestamp' || Property::getPropertyType($val) === 'timestamp' ){
+                $out[$key] = strtotime($val);
+            }
+            else{
+                $out[$key] = $val;
+            }
+        }
+        $transport->addCall('POST', self::API_URL_ADDPURCHASE, $out);
     }
 
     /**
