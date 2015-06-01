@@ -40,6 +40,11 @@ class Property
                 if (self::is_timestamp($value)) {
                     return 'timestamp';
                 }
+
+                if (self::is_timestamp(strtotime($value))) {
+                    return 'timestamp';
+                }
+
                 return 'string';
                 break;
         }
