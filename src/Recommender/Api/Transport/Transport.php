@@ -230,8 +230,6 @@ class Transport
     {
         $curl = new Curl();
 
-        self::setResults(array());
-
         $urlDbPrefix = str_replace(
             array(
                 '%db%'
@@ -260,7 +258,7 @@ class Transport
             $this->getPostType()
         );
 
-        self::addResults( $curl->process() );
+        self::setResults( $curl->process() );
     }
 
     /**
