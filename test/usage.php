@@ -32,7 +32,7 @@ $products = array(
         'id' => 'item-400',
         'name' => 'Jizdni kolo 1',
         'description' => 'Sahodlouhy popis produktu 1',
-        'price' => 2011
+        'price' => null
     ),
     1 => array(
         'id' => 'item-401',

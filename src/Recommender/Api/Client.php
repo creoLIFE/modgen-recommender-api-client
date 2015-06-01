@@ -339,7 +339,7 @@ class Client
                 ),
                 self::API_URL_ADDITEM_PROPERTIES
             );
-            $transport->addCall('PUT', $url, array('type'=>Property::getPropertyType($val)), 'GET');
+            $transport->addCall('PUT', $url, array('type'=>Property::getPropertyType($val, $key)), 'GET');
         }
     }
 

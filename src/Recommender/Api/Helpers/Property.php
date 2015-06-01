@@ -19,7 +19,7 @@ class Property
      * @param boolean $forceSetType - force type of value to "set"
      * @return string
      */
-    public static function getPropertyType($value, $forceSetType = false)
+    public static function getPropertyType($value, $propertyName = null, $forceSetType = false)
     {
         switch (gettype($value)) {
             case 'integer':
@@ -43,6 +43,10 @@ class Property
 
                 if (self::is_timestamp(strtotime($value))) {
                     return 'timestamp';
+                }
+
+                if( $propertyName === 'price' ){
+                    return 'int';
                 }
 
                 return 'string';
