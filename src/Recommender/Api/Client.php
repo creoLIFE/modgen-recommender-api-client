@@ -398,14 +398,18 @@ class Client
             self::API_URL_ADDITEM_VALUES
         );
 
+        $out = array();
         foreach($product as $key=>$val){
-            if( $key === 'price' && Property::getPropertyType($val) === 'int' ){
+            if( $key === 'price' && Property::getPropertyType($val,$key) === 'int' ){
                 $val = (int)$val;
+            }
+            if( $key === 'available' && Property::getPropertyType($val,$key) === 'int' ){
+                $val = (boolean)$val;
             }
             $out[$key] = $val;
         }
 
-        $transport->addCall('POST', $url, $product);
+        $transport->addCall('POST', $url, $out);
     }
 
     /**
