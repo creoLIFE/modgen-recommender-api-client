@@ -218,16 +218,15 @@ class Client
      * Method is responsible of adding products to Modgen Recommender API
      * @param array $dataList - list of arrays with data
      * @param string $keyElement - definition of main key fron data array
-     * @param array $rolesDefinition - definition of roles for properties
      */
-    public function addProducts($dataList, $keyElement, array $rolesDefinition = array())
+    public function addProducts($dataList, $keyElement)
     {
         if (!is_array($dataList) && count($dataList) < 2) {
             $dataList[] = $dataList;
         }
 
         foreach ($dataList as $key => $p) {
-            self::addProduct($p, $keyElement,$rolesDefinition);
+            self::addProduct($p, $keyElement);
             $this->setPropertiesAdded(true);
         }
     }
@@ -238,14 +237,12 @@ class Client
      * @param string $keyElement - definition of main key fron data array
      * @param array $rolesDefinition - definition of roles for properties
      */
-    public function addProduct($data, $keyElement, array $rolesDefinition = array())
+    public function addProduct($data, $keyElement)
     {
         self::addProductID($data[$keyElement]);
         if( !$this->isPropertiesAdded() ) {
             self::addProductProperties($keyElement, $data);
-            if( count($rolesDefinition) > 0 ) {
-                self::addProductPropertiesRoles($keyElement, $rolesDefinition);
-            }
+            self::addProductPropertiesRoles($keyElement, $data);
             $this->setPropertiesAdded(true);
         }
         self::addProductValues($keyElement, $data[$keyElement], $data);
@@ -368,7 +365,7 @@ class Client
                 ),
                 self::API_URL_ADDITEM_PROPERTIES_ROLES
             );
-            $transport->addCall('PUT', $url, array('propertyName'=>$val), 'GET');
+            $transport->addCall('PUT', $url, array('propertyName'=>Property::getPropertyType($val)), 'GET');
         }
     }
 

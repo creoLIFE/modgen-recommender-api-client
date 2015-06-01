@@ -143,7 +143,6 @@ class Batch extends Transport
      */
     public function process()
     {
-        print_r($this->getBatch());
         parent::addCall($this->getBathMethod(), self::API_URL_BATCH, $this->getBatch(), $this->getPostType());
         $result = parent::process();
 
@@ -152,7 +151,6 @@ class Batch extends Transport
             print_r($this->getBatch());
             print_r('<br>');
         }
-
         $this->setBatch(array());
         $this->setCount(0);
 
