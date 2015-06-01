@@ -57,9 +57,12 @@ class Property
      */
     private static function is_timestamp($timestamp)
     {
-        return ((string)(int)$timestamp === $timestamp)
-        && ($timestamp <= PHP_INT_MAX)
-        && ($timestamp >= ~PHP_INT_MAX)
-        && (!strtotime($timestamp));
+        $check = (is_int($timestamp) OR is_float($timestamp))
+            ? $timestamp
+            : (string) (int) $timestamp;
+
+        return  ($check === $timestamp)
+        AND ( (int) $timestamp <=  PHP_INT_MAX)
+        AND ( (int) $timestamp >= ~PHP_INT_MAX);
     }
 }
