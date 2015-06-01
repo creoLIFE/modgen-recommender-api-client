@@ -11,7 +11,7 @@
 
 namespace Recommender\Api\Helpers;
 
-class Property
+class Roles
 {
     /**
      * Return right property type
@@ -19,28 +19,17 @@ class Property
      * @param boolean $forceSetType - force type of value to "set"
      * @return string
      */
-    public static function getPropertyType($value, $forceSetType = false)
+    public static function getPropertyType($name, $forceSetType = false)
     {
-        switch (gettype($value)) {
-            case 'integer':
-                return 'int';
+        switch ($name) {
+            case 'price':
+                return 'income';
                 break;
-            case 'double':
-                return 'double';
+            case 'name':
+                return 'name';
                 break;
-            case 'boolean':
-                return 'boolean';
-                break;
-            case 'string':
             default:
-                if ($forceSetType) {
-                    return 'set';
-                }
-
-                if (self::is_timestamp($value)) {
-                    return 'timestamp';
-                }
-                return 'string';
+                return false;
                 break;
         }
     }

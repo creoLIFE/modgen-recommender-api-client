@@ -13,6 +13,7 @@ namespace Recommender\Api;
 
 use Recommender\Api\Helpers\Hmac;
 use Recommender\Api\Helpers\Property;
+use Recommender\Api\Helpers\Roles;
 use Recommender\Api\Transport\Transport;
 
 class Client
@@ -356,16 +357,20 @@ class Client
 
         $transport = $this->getTransport();
         foreach ($product as $key => $val) {
+            $role = Roles::getPropertyType($key);
             $url = str_replace(
                 array(
                     '%rolename%'
                 ),
                 array(
-                    $key
+                    $role
                 ),
                 self::API_URL_ADDITEM_PROPERTIES_ROLES
             );
-            $transport->addCall('PUT', $url, array('propertyName'=>Property::getPropertyType($val)), 'GET');
+
+            if( $role ){
+                $transport->addCall('PUT', $url, array('propertyName'=>$key), 'GET');
+            }
         }
     }
 
@@ -419,5 +424,7 @@ class Client
             print_r($result);
             print_r('<br>');
         }
+
+        return $result;
     }
 }

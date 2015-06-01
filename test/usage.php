@@ -14,6 +14,7 @@ date_default_timezone_set('UTC');
 $db = 'shopexpo-test';
 $key = 'DyioS5vct4fyqbjjr7Yno8dUFALYjAZe0JP3yR65aCNdtbjk92F9gxU1yDAVR7QS';
 $transport = new Recommender\Api\Transport\Batch();
+//$transport = new Recommender\Api\Transport\Transport();
 //$transport->setBatchSize(4);
 $transport->setDebug(true);
 $classApiClient = new \Recommender\Api\Client('http://rapi-dev.modgen.net', $db, $key, $transport);
@@ -50,9 +51,10 @@ $products = array(
 $classApiClient->setDebug(true);
 //$classApiClient->checkHmacAuthentication('gahpiev6eighaig1aek4ujietheiXeengae3Ohqu9iecutheof5rooxeigheel8G');
 
-//$classApiClient->addProduct($product,'id');
+
 $classApiClient->deleteDb();
-$classApiClient->addProducts($products,'id');
+$classApiClient->addProduct($product,'id');
+//$classApiClient->addProducts($products,'id');
 $classApiClient->process();
 
 
