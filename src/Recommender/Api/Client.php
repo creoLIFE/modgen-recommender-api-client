@@ -415,6 +415,10 @@ class Client
             }
             $out[$key] = $val;
         }
+
+        //Create item when not exist
+        $out['cascadeCreate'] = true;
+
         $transport->addCall('POST', self::API_URL_ADDPURCHASE, $out);
     }
 
