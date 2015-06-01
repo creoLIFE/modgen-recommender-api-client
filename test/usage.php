@@ -30,8 +30,8 @@ $product = array(
 $products = array(
     0 => array(
         'id' => 'item-400',
-        'name' => 'Jizdni kolo 1',
-        'description' => 'Sahodlouhy popis produktu 1',
+        'name' => null,
+        'description' => null,
         'price' => null
     ),
     1 => array(
