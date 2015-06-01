@@ -50,7 +50,12 @@ $classApiClient->setDebug(true);
 
 //$classApiClient->addProduct($product,'id');
 $classApiClient->deleteDb();
-$classApiClient->addProducts($products,'id');
+$classApiClient->addProducts($products,'id', array(
+    'id'=>'integer',
+    'name'=>'string',
+    'description'=>'string',
+    'price'=>'integer'
+));
 $classApiClient->process();
 
 

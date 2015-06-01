@@ -28,6 +28,11 @@ class Client
     const API_URL_ADDITEM_PROPERTIES = '/items/properties/%propertyname%';
 
     /*
+     * @var string - ADD Item property
+     */
+    const API_URL_ADDITEM_PROPERTIES_ROLES = '/items/properties/roles/%rolename%';
+
+    /*
      * @var string - ADD Item values
      */
     const API_URL_ADDITEM_VALUES = '/items/%itemid%';
@@ -213,15 +218,16 @@ class Client
      * Method is responsible of adding products to Modgen Recommender API
      * @param array $dataList - list of arrays with data
      * @param string $keyElement - definition of main key fron data array
+     * @param array $rolesDefinition - definition of roles for properties
      */
-    public function addProducts($dataList, $keyElement)
+    public function addProducts($dataList, $keyElement, array $rolesDefinition = array())
     {
         if (!is_array($dataList) && count($dataList) < 2) {
             $dataList[] = $dataList;
         }
 
         foreach ($dataList as $key => $p) {
-            self::addProduct($p, $keyElement);
+            self::addProduct($p, $keyElement,$rolesDefinition);
             $this->setPropertiesAdded(true);
         }
     }
@@ -230,13 +236,16 @@ class Client
      * Method is responsible of adding products to Modgen Recommender API
      * @param array $data - array with data
      * @param string $keyElement - definition of main key fron data array
-     * @param boolean $propertiesAlreadySet - definition of main key fron data array
+     * @param array $rolesDefinition - definition of roles for properties
      */
-    public function addProduct($data, $keyElement)
+    public function addProduct($data, $keyElement, array $rolesDefinition = array())
     {
         self::addProductID($data[$keyElement]);
         if( !$this->isPropertiesAdded() ) {
             self::addProductProperties($keyElement, $data);
+            if( count($rolesDefinition) > 0 ) {
+                self::addProductPropertiesRoles($keyElement, $rolesDefinition);
+            }
             $this->setPropertiesAdded(true);
         }
         self::addProductValues($keyElement, $data[$keyElement], $data);
@@ -333,6 +342,33 @@ class Client
                 self::API_URL_ADDITEM_PROPERTIES
             );
             $transport->addCall('PUT', $url, array('type'=>Property::getPropertyType($val)), 'GET');
+        }
+    }
+
+    /**
+     * Method will add properties in to product ID
+     * @param string $keyElement - definition of main key fron data array
+     * @param array $products - list of properties to add (connect to item id)
+     * @return boolean
+     */
+    private function addProductPropertiesRoles($keyElement, array $product)
+    {
+        if (isset($product[$keyElement])) {
+            unset($product[$keyElement]);
+        }
+
+        $transport = $this->getTransport();
+        foreach ($product as $key => $val) {
+            $url = str_replace(
+                array(
+                    '%rolename%'
+                ),
+                array(
+                    $key
+                ),
+                self::API_URL_ADDITEM_PROPERTIES_ROLES
+            );
+            $transport->addCall('PUT', $url, array('propertyName'=>$val), 'GET');
         }
     }
 

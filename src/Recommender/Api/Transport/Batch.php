@@ -129,7 +129,7 @@ class Batch extends Transport
         $request = new Request($method, $path);
         $request->setParams($data);
         $this->increaseCount();
-        $this->setPostType( strtolower($postType) === 'get' ? 'batch' : $postType);
+        $this->setPostType(strtolower($postType) === 'get' ? 'batch' : $postType);
 
         $this->batch[] = $request->getRequest();
 
@@ -143,6 +143,7 @@ class Batch extends Transport
      */
     public function process()
     {
+        print_r($this->getBatch());
         parent::addCall($this->getBathMethod(), self::API_URL_BATCH, $this->getBatch(), $this->getPostType());
         $result = parent::process();
 
