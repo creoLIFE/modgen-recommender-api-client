@@ -410,12 +410,10 @@ class Client
         $transport = $this->getTransport();
         $out = array();
         foreach($data as $key=>$val){
-            if( $key === 'timestamp' || Property::getPropertyType($val) === 'timestamp' ){
-                $out[$key] = strtotime($val);
+            if( $key === 'timestamp' && Property::getPropertyType($val) === 'timestamp' ){
+                $val = strtotime($val);
             }
-            else{
-                $out[$key] = $val;
-            }
+            $out[$key] = $val;
         }
         $transport->addCall('POST', self::API_URL_ADDPURCHASE, $out);
     }
