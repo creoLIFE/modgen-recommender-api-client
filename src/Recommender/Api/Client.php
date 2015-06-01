@@ -400,8 +400,8 @@ class Client
 
         $out = array();
         foreach($product as $key=>$val){
-            if( $key === 'price' && Property::getPropertyType($val,$key) === 'int' ){
-                $val = (int)$val;
+            if( $key === 'price' && Property::getPropertyType($val,$key) === 'double' ){
+                $val = (double)$val;
             }
             if( $key === 'available' && Property::getPropertyType($val,$key) === 'int' ){
                 $val = (boolean)$val;
