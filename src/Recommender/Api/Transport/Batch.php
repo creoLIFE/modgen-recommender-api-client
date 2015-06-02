@@ -41,6 +41,16 @@ class Batch extends Transport
      */
     private $bathMethod = 'POST';
 
+    /*
+     * @var string - Path to folder where Batch will store created batches
+    */
+    private $batchFileStorePath = '';
+
+    /*
+     * @var string - File counter for batch store
+    */
+    private $batchFileCounter = 0;
+
     /**
      * @return array
      */
@@ -117,6 +127,46 @@ class Batch extends Transport
     }
 
     /**
+     * @return string
+     */
+    public function getBatchFileStorePath()
+    {
+        return $this->batchFileStorePath;
+    }
+
+    /**
+     * @param string $batchFileStorePath
+     */
+    public function setBatchFileStorePath($batchFileStorePath)
+    {
+        $this->batchFileStorePath = $batchFileStorePath;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBatchFileCounter()
+    {
+        return $this->batchFileCounter;
+    }
+
+    /**
+     * @param int $batchFileCounter
+     */
+    public function setBatchFileCounter($batchFileCounter)
+    {
+        $this->batchFileCounter = $batchFileCounter;
+    }
+
+    /**
+     * @param int $increase
+     */
+    public function increaseBatchFileCounter($increase = 1)
+    {
+        $this->setBatchFileCounter($this->getBatchFileCounter() + $increase);
+    }
+
+    /**
      * Method will add param key and its value
      * @param string $method - request metod GET/POST/PUT, etc
      * @param string $path - url path to call
@@ -143,6 +193,7 @@ class Batch extends Transport
      */
     public function process()
     {
+        self::storeBatch();
         parent::addCall($this->getBathMethod(), self::API_URL_BATCH, $this->getBatch(), $this->getPostType());
         $result = parent::process();
 
@@ -155,5 +206,16 @@ class Batch extends Transport
         $this->setCount(0);
 
         return $result;
+    }
+
+    /**
+     * Method will store batch to file
+     */
+    private function storeBatch()
+    {
+        if( !empty(self::getBatchFileStorePath()) ){
+            self::increaseBatchFileCounter();
+            file_put_contents(self::getBatchFileStorePath() . '_no-' . self::getBatchFileCounter() . '.json', $this->getBatch() );
+        }
     }
 }
