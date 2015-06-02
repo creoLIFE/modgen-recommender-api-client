@@ -50,6 +50,10 @@ class Property
                     return 'double';
                 }
 
+                if( $propertyName === 'available' ){
+                    return 'boolean';
+                }
+
                 return 'string';
                 break;
         }

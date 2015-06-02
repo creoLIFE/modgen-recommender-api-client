@@ -63,7 +63,7 @@ $classApiClient->setDebug(true);
 
 
 $classApiClient->deleteDb();
-$classApiClient->addProducts($products,'id');
+//$classApiClient->addProducts($products,'id');
 //$classApiClient->addProduct($product,'id');
 $classApiClient->addPurchase($purchase);
 
