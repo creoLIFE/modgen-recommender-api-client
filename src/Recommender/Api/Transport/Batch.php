@@ -215,7 +215,7 @@ class Batch extends Transport
     {
         if( !empty(self::getBatchFileStorePath()) ){
             self::increaseBatchFileCounter();
-            file_put_contents(self::getBatchFileStorePath() . '_no-' . self::getBatchFileCounter() . '.json', $this->getBatch() );
+            file_put_contents(self::getBatchFileStorePath() . 'batch_no-' . self::getBatchFileCounter() . '.json', json_encode($this->getBatch()) );
         }
     }
 }

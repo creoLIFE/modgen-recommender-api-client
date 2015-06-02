@@ -2,5 +2,6 @@
 vendor/*
 report/*
 /test/tmp/*
+/test/store/*
 composer.lock
 composer.phar
