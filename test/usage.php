@@ -18,6 +18,7 @@ $transport = new Recommender\Api\Transport\Batch();
 //$transport->setBatchSize(4);
 $transport->setDebug(true);
 $transport->setBatchFileStorePath(__DIR__.'/store/');
+
 $classApiClient = new \Recommender\Api\Client('http://rapi-dev.modgen.net', $db, $key, $transport);
 //$classApiClient = new \Recommender\Api\Client('http://rapi-dev.modgen.net', $db, $key, new Recommender\Api\Transport\Transport());
 
