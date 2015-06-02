@@ -24,7 +24,8 @@ $product = array(
     'id' => 'item-352',
     'name' => 'Jizdni kolo',
     'description' => 'Sahodlouhy popis produktu',
-    'price' => 1432866460
+    'price' => 1432866460,
+    'available'=>12112
 );
 
 $products = array(
@@ -32,19 +33,22 @@ $products = array(
         'id' => 'item-400',
         'name' => null,
         'description' => null,
-        'price' => null
+        'price' => null,
+        'available'=>false
     ),
     1 => array(
         'id' => 'item-401',
         'name' => 'Zimni bunda 1',
         'description' => 'Nejaky jiny popis 1',
-        'price' => 2010
+        'price' => 2010,
+        'available'=>null
     ),
     2 => array(
         'id' => 'item-402',
         'name' => 'Zimni bunda 1',
         'description' => 'Nejaky jiny popis 1',
-        'price' => 2010
+        'price' => 2010,
+        'available'=>12112
     )
 );
 

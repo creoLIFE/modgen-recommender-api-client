@@ -403,8 +403,9 @@ class Client
             if( $key === 'price' && Property::getPropertyType($val,$key) === 'double' ){
                 $val = (double)$val;
             }
-            if( $key === 'available' && Property::getPropertyType($val,$key) === 'int' ){
-                $val = (boolean)$val;
+
+            if( $key === 'available' ){
+                $val = $val === true ? 1 : 0;
             }
             $out[$key] = $val;
         }
