@@ -51,6 +51,13 @@ $products = array(
         'description' => 'Nejaky jiny popis 1',
         'price' => 2010,
         'available'=>12112
+    ),
+    3 => array(
+        'id' => 'ACPLJETPUX140',
+        'name' => 'JEKOD TPU silikonové pouzdro i9190 S4 mini, Black',
+        'description' => 'JEKOD TPU silikonové ochranné pouzdro pro Samsung i9190 Galaxy S4 mini, barva: Black',
+        'price' => "114,88",
+        'available'=>false
     )
 );
 
@@ -65,9 +72,9 @@ $classApiClient->setDebug(true);
 
 
 $classApiClient->deleteDb();
-//$classApiClient->addProducts($products,'id');
+$classApiClient->addProducts($products,'id');
 //$classApiClient->addProduct($product,'id');
-$classApiClient->addPurchase($purchase);
+//$classApiClient->addPurchase($purchase);
 
 $classApiClient->process();
 

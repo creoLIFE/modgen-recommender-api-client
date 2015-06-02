@@ -401,6 +401,7 @@ class Client
         $out = array();
         foreach($product as $key=>$val){
             if( $key === 'price' && Property::getPropertyType($val,$key) === 'double' ){
+                $val = str_replace(',','.',$val);
                 $val = (double)$val;
             }
 
