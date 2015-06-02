@@ -22,41 +22,44 @@ class Property
      */
     public static function getPropertyType($value, $propertyName = null, $forceSetType = false)
     {
+        $result = 'string';
         switch (gettype($value)) {
             case 'integer':
-                return 'int';
+                $result = 'int';
                 break;
             case 'double':
-                return 'double';
+                $result = 'double';
                 break;
             case 'boolean':
-                return 'boolean';
+                $result = 'boolean';
                 break;
             case 'string':
             default:
-                if ($forceSetType) {
-                    return 'set';
-                }
-
-                if (self::is_timestamp($value)) {
-                    return 'timestamp';
-                }
-
-                if (self::is_timestamp(strtotime($value))) {
-                    return 'timestamp';
-                }
-
-                if( $propertyName === 'price' ){
-                    return 'double';
-                }
-
-                if( $propertyName === 'available' ){
-                    return 'boolean';
-                }
-
-                return 'string';
+                $result = 'string';
                 break;
         }
+
+        if ($forceSetType) {
+            $result = 'set';
+        }
+
+        if (self::is_timestamp($value)) {
+            $result = 'timestamp';
+        }
+
+        if (self::is_timestamp(strtotime($value))) {
+            $result = 'timestamp';
+        }
+
+        if( $propertyName === 'price' ){
+            $result = 'double';
+        }
+
+        if( $propertyName === 'available' ){
+            $result = 'boolean';
+        }
+
+        return $result;
     }
 
     /**

@@ -427,6 +427,7 @@ class Client
             if( $key === 'timestamp' && Property::getPropertyType($val) === 'timestamp' ){
                 $val = strtotime($val);
             }
+
             $out[$key] = $val;
         }
 
