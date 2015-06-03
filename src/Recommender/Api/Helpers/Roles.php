@@ -22,12 +22,9 @@ class Roles
     public static function getPropertyType($name, $forceSetType = false)
     {
         switch ($name) {
-            /*
-             * fix for income issue
             case 'price':
                 return 'income';
                 break;
-            */
             case 'name':
                 return 'name';
                 break;
