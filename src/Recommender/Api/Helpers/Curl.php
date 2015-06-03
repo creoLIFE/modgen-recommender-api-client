@@ -65,7 +65,6 @@ class Curl
         $this->curl = curl_init();
         $post = self::encodePostQuery($postQueryData, $postType);
 
-        $i = 0;
         switch ($method) {
             case "GET":
                 break;
@@ -75,8 +74,7 @@ class Curl
                 curl_setopt($this->curl, CURLOPT_POST, 1);
                 if ($postQueryData) {
                     curl_setopt($this->curl, CURLOPT_POSTFIELDS, $post['data']);
-                        file_put_contents(__DIR__ . '../../../../../test/store/' . $i . '.json', $post['data']);
-                        $i++;
+                        file_put_contents(__DIR__ . '../../../../../test/store/' . rand(0,100000000000) . '.json', $post['data']);
                 }
                 break;
             case "PUT":
