@@ -240,7 +240,7 @@ class Client
      */
     public function addProduct($data, $keyElement)
     {
-        self::addProductID($data[$keyElement]);
+        //self::addProductID($data[$keyElement]);
         if( !$this->isPropertiesAdded() ) {
             self::addProductProperties($keyElement, $data);
             self::addProductPropertiesRoles($keyElement, $data);
@@ -409,6 +409,8 @@ class Client
                 $val = $val === true ? 1 : 0;
             }
             $out[$key] = $val;
+
+            $out['!cascadeCreate'] = true;
         }
 
         $transport->addCall('POST', $url, $out);
